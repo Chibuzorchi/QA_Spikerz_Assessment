@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -40,4 +41,4 @@ jobs:
       run: |
         echo "Add your deployment commands here"
         # Example for deploying to a server:
-        # ssh user@your-server "docker pull your-image && docker-compose up -d"
+        # ssh user@your-server "docker pull ${{ secrets.DOCKER_USERNAME }}/playwright-tests:latest && docker-compose up -d"
