@@ -7,7 +7,6 @@ const loginToGoogle = async (page, username, password) => {
     try {
         await googleLoginPage.enterEmail(username);
         await googleLoginPage.enterPassword(password);
-        await googleLoginPage.handlePermissions();
         await googleLoginPage.selectAllCheckboxes();
         await googleLoginPage.finalizeLogin();
     }

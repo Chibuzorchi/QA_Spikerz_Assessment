@@ -32,9 +32,9 @@ test_1.test.describe('Social Connect Tests', () => {
             throw new Error('PROFILE_PICTURE_URL not set in environment variables');
         }
         await socialConnectPage.navigateToYoutube();
-        const popup = await socialConnectPage.handlePopup();
-        await (0, authUtils_1.loginToGoogle)(popup, googleUsername, googlePassword);
-        await page.bringToFront();
+        await socialConnectPage.clickYoutubeSubscribe();
+        await (0, authUtils_1.loginToGoogle)(page, googleUsername, googlePassword);
+      
         // Assertions to confirm image displayed and channel id is correct
         const confirmDetailsHeader = socialConnectPage.getConfirmDetailsHeader();
         await (0, test_1.expect)(confirmDetailsHeader).toBeVisible();
