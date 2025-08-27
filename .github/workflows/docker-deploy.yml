@@ -48,29 +48,8 @@ jobs:
           -e TARGET_YOUTUBE_CHANNEL_ID="${{ secrets.TARGET_YOUTUBE_CHANNEL_ID }}" \
           -e USERNAME="${{ secrets.USERNAME }}" \
           -e PASSWORD="${{ secrets.PASSWORD }}" \
-          ${{ secrets.DOCKER_USERNAME }}/playwright-tests:latest \
-          npm run test
+          ${{ secrets.DOCKER_USERNAME }}/playwright-tests:latest
         echo "✅ Tests completed successfully!"
-
-  test-alternative:
-    needs: build
-    runs-on: ubuntu-latest
-    if: failure() # Only run if the main test job fails
-    
-    steps:
-    - name: Run Tests with Different Command
-      run: |
-        echo "🔄 Trying alternative test command..."
-        docker run --rm \
-          -e BASE_URL="${{ secrets.BASE_URL }}" \
-          -e GOOGLE_USERNAME="${{ secrets.GOOGLE_USERNAME }}" \
-          -e GOOGLE_PASSWORD="${{ secrets.GOOGLE_PASSWORD }}" \
-          -e PROFILE_PICTURE_URL="${{ secrets.PROFILE_PICTURE_URL }}" \
-          -e TARGET_YOUTUBE_CHANNEL_ID="${{ secrets.TARGET_YOUTUBE_CHANNEL_ID }}" \
-          -e USERNAME="${{ secrets.USERNAME }}" \
-          -e PASSWORD="${{ secrets.PASSWORD }}" \
-          ${{ secrets.DOCKER_USERNAME }}/playwright-tests:latest \
-          npx playwright test
 
   deploy:
     needs: [build, test]
@@ -82,4 +61,3 @@ jobs:
       run: |
         echo "🚀 Deploying to production..."
         echo "All tests passed! Ready for deployment."
-        # Add your actual deployment commands here

@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json ./
 
-# Install production dependencies only
-RUN npm ci --only=production
+# Install all dependencies (including dev dependencies for testing)
+RUN npm ci
 
 # Install Playwright browsers
 RUN npx playwright install --with-deps
@@ -16,20 +16,11 @@ RUN npx playwright install --with-deps
 # Copy the rest of the application files
 COPY . .
 
-# Install dev dependencies for TypeScript compilation
-RUN npm install --save-dev typescript @types/node @types/express
-
-# Build TypeScript project
-RUN npx tsc -p tsconfig.server.json
-
-# Remove dev dependencies and source TypeScript files
-RUN npm prune --production && \
-    rm -rf src/ tests/ && \
-    rm -rf node_modules/typescript node_modules/@types && \
-    ls -la dist/
+# Build TypeScript project (both tests and server)
+RUN npx tsc -p tsconfig.json
 
 # Expose API port
 EXPOSE 3000
 
-# Start the API server using compiled JavaScript
-CMD ["node", "dist/server.js"]
+# Default command runs tests
+CMD ["npm", "test"]
