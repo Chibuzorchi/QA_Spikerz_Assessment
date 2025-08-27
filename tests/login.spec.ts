@@ -18,7 +18,7 @@ test.describe('Login Tests', () => {
       },
     });
 
-    // Create a new page in the context
+    // Create a new page in the context instant
     const page: Page = await context.newPage();
 
     // Attempt to navigate to the page and catch the error
