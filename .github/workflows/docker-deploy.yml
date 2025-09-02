@@ -61,8 +61,7 @@ jobs:
           -e USERNAME="${{ secrets.USERNAME }}" \
           -e PASSWORD="${{ secrets.PASSWORD }}" \
           -e PLAYWRIGHT_HEADLESS=false \
-          mcr.microsoft.com/playwright:v1.41.0-focal \
-          sh -c "cd /app && npm test"
+          ${{ secrets.DOCKER_USERNAME }}/playwright-tests:latest
         echo "Tests completed successfully!"
 
   deploy:
