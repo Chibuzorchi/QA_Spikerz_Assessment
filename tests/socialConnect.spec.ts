@@ -19,8 +19,7 @@ test.describe('Social Connect Tests', () => {
     }
   });
 
-  test.only('should navigate to YouTube and verify image appears', async ({ page }: { page: Page }) => {
-    test.slow();
+  test('should navigate to YouTube and verify image appears', async ({ page }: { page: Page }) => {
 
     // Validate environment variables
     const googleUsername = process.env.GOOGLE_USERNAME;

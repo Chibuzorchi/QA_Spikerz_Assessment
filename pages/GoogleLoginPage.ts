@@ -14,8 +14,9 @@ class GoogleLoginPage {
     this.page = page;
 
     // Locators
-    this.emailInput = 'input[type="email"]';
-    this.passwordInput = 'input[type="password"]';
+    this.emailInput = 'input#identifierId, input[type="email"]';
+    // Use the real password field, not the hidden mirror input
+    this.passwordInput = 'input[name="Passwd"]';
     this.identifierNextButton = '#identifierNext';
     this.passwordNextButton = '#passwordNext';
     this.continueButton = 'button:has-text("Continue")';
@@ -25,13 +26,17 @@ class GoogleLoginPage {
   }
 
   async enterEmail(username: string): Promise<void> {
+    await this.page.waitForSelector(this.emailInput, { state: 'visible' });
     await this.page.fill(this.emailInput, username);
     await this.page.click(this.identifierNextButton);
+    // Wait for the password step to load
+    await this.page.waitForSelector(this.passwordInput, { state: 'visible' });
   }
 
   async enterPassword(password: string): Promise<void> {
-    await this.page.waitForSelector(this.passwordInput, { state: 'visible' });
-    await this.page.fill(this.passwordInput, password);
+    const passwordField = this.page.locator(this.passwordInput);
+    await passwordField.waitFor({ state: 'visible' });
+    await passwordField.fill(password);
     await this.page.click(this.passwordNextButton);
   }
 
@@ -45,17 +50,15 @@ class GoogleLoginPage {
   async selectAllCheckboxes(): Promise<void> {
     try {
       // Wait for the checkbox to be visible and stable
-      await this.page.waitForSelector(this.selectAllCheckbox, { 
-        state: 'visible', 
-        timeout: 50000 
-      });
+      await this.page.waitForSelector(this.selectAllCheckbox, { state: 'visible',  timeout: 50000 });
       
       // Wait a bit for any animations or dynamic content to settle
       await this.page.waitForTimeout(500);
       
       // Click the checkbox instead of using check() to trigger all event handlers
       await this.page.click(this.selectAllCheckbox, {
-        force: true // This ensures the click happens even if the element is slightly obscured
+        force: true 
+      
       });
       
       // Optional: Wait a moment to let the selection take effect
@@ -66,7 +69,7 @@ class GoogleLoginPage {
       if (!alreadyHasAccess) {
         throw new Error('Neither the "Select all" checkbox nor the "You already have access" message was found.');
       }
-      console.log('User already has access. Skipping checkbox selection.');
+      throw new Error('User already has access. Skipping checkbox selection.');
     }
   }
 

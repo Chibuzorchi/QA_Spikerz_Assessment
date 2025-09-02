@@ -22,12 +22,10 @@ test.describe('Login Tests', () => {
     const page: Page = await context.newPage();
 
     // Attempt to navigate to the page and catch the error
-    let response;
-    try {
-      response = await page.goto('/');
-    } catch (error) {
-      console.error('Navigation failed:', error);
-    }
+  let response;
+  try {
+    response = await page.goto('/');
+  } catch (error) {}
 
     // Verify that access is denied by checking for an error message on the page
     const accessDeniedMessage = page.locator('body');
